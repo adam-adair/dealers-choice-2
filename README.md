@@ -1,6 +1,1 @@
-# heroku commands
--heroku create
--git push heroku master
--heroku open
--heroku logs --tail
--heroku ps:exec
+Build your own prof. Get the best of all worlds.
