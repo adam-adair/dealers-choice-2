@@ -1,32 +1,23 @@
-/* eslint-disable react/button-has-type */
 import React, {Component} from 'react'
+import InstructorForm from './InstructorForm'
 import axios from 'axios'
 import {Link, Redirect} from 'react-router-dom'
-import InstructorForm from './InstructorForm'
 
-export default class SingleInstructor extends Component {
+export default class CreateInstructor extends Component {
   constructor () {
     super()
     this.state = {
       instructor: {
-        hair: '',
-        facialHair: '',
+        hair: 'none',
+        facialHair: 'none',
         glasses: false,
         name: '',
-        shirt: ''
+        shirt: 'none'
       },
-      loading: true,
       redirect: false
     }
     this.onChange = this.onChange.bind(this)
     this.submit = this.submit.bind(this)
-    this.delete = this.delete.bind(this)
-  }
-
-  async componentDidMount () {
-    const id = this.props.match.params.id
-    const res = await axios.get(`/api/instructor/${id}`)
-    this.setState({...this.state, instructor: res.data, loading: false, })
   }
 
   onChange(ev){
@@ -35,19 +26,17 @@ export default class SingleInstructor extends Component {
     this.setState({...this.state, instructor: instr, })
   }
 
-  async delete(){
-    await axios.delete(`/api/instructor/${this.state.instructor.id}`)
+  async submit(ev) {
+    ev.preventDefault();
+    await axios.post(`/api/instructor/${this.state.instructor.id}`,this.state.instructor)
     this.setState({...this.state, redirect: true})
   }
 
-  async submit(ev) {
-    ev.preventDefault();
-    await axios.put(`/api/instructor/${this.state.instructor.id}`,this.state.instructor)
-  }
 
-  render () {
-    const { instructor } = this.state
+  render() {
+    const {instructor} = this.state
     if(this.state.redirect) return (<Redirect to='/'/>)
+
     return (
       <div>
         <InstructorForm instructor={instructor} submit={this.submit} onChange={this.onChange}/>
@@ -62,8 +51,8 @@ export default class SingleInstructor extends Component {
             {instructor.glasses ? <img src='glasses.png'/> : '' }
           </div>
         }
-        <button className='del' onClick={this.delete}>Delete</button>
       </div>
     )
   }
 }
+

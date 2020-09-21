@@ -101,6 +101,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 /* harmony import */ var _InstructorList__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./InstructorList */ "./client/components/InstructorList.js");
 /* harmony import */ var _SingleInstructor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./SingleInstructor */ "./client/components/SingleInstructor.js");
+/* harmony import */ var _CreateInstructor__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./CreateInstructor */ "./client/components/CreateInstructor.js");
+
 
 
 
@@ -114,7 +116,100 @@ class App extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], {
       path: "/instructor/:id",
       component: _SingleInstructor__WEBPACK_IMPORTED_MODULE_3__["default"]
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], {
+      exact: true,
+      path: "/create",
+      component: _CreateInstructor__WEBPACK_IMPORTED_MODULE_5__["default"]
     }));
+  }
+
+}
+
+/***/ }),
+
+/***/ "./client/components/CreateInstructor.js":
+/*!***********************************************!*\
+  !*** ./client/components/CreateInstructor.js ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return CreateInstructor; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _InstructorForm__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./InstructorForm */ "./client/components/InstructorForm.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+
+
+
+
+class CreateInstructor extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
+  constructor() {
+    super();
+    this.state = {
+      instructor: {
+        hair: 'none',
+        facialHair: 'none',
+        glasses: false,
+        name: '',
+        shirt: 'none'
+      },
+      redirect: false
+    };
+    this.onChange = this.onChange.bind(this);
+    this.submit = this.submit.bind(this);
+  }
+
+  onChange(ev) {
+    const val = ev.target.name !== 'glasses' ? ev.target.value : ev.target.value === 'yes';
+    const instr = { ...this.state.instructor,
+      [ev.target.name]: val
+    };
+    this.setState({ ...this.state,
+      instructor: instr
+    });
+  }
+
+  async submit(ev) {
+    ev.preventDefault();
+    await axios__WEBPACK_IMPORTED_MODULE_2___default.a.post(`/api/instructor/${this.state.instructor.id}`, this.state.instructor);
+    this.setState({ ...this.state,
+      redirect: true
+    });
+  }
+
+  render() {
+    const {
+      instructor
+    } = this.state;
+    if (this.state.redirect) return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Redirect"], {
+      to: "/"
+    });
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_InstructorForm__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      instructor: instructor,
+      submit: this.submit,
+      onChange: this.onChange
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
+      to: "/"
+    }, "Back"), this.state.loading ? 'Loading' : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      id: "pic"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      src: "bg.png"
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      src: "head.png"
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      src: instructor.facialHair + '.png'
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      src: instructor.hair + '.png'
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      src: instructor.shirt + '.png'
+    }), instructor.glasses ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      src: "glasses.png"
+    }) : ''));
   }
 
 }
@@ -148,6 +243,68 @@ const Instructor = ({
 
 /***/ }),
 
+/***/ "./client/components/InstructorForm.js":
+/*!*********************************************!*\
+  !*** ./client/components/InstructorForm.js ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* eslint-disable react/jsx-key */
+
+
+const InstructorForm = ({
+  submit,
+  onChange,
+  instructor
+}) => {
+  const {
+    name
+  } = instructor;
+  const selectOptions = {
+    hair: [['none', 'dark', 'blue'], 'Hair:'],
+    facialHair: [['none', 'goatee'], 'Facial Hair:'],
+    shirt: [['none', 'turtleneck', 't-shirt', 'colorful'], 'Shirt:'],
+    glasses: [['yes', 'no'], 'Glasses:']
+  };
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+    onSubmit: submit
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+    htmlFor: "name"
+  }, "Name:"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input", {
+    name: "name",
+    type: "text",
+    onChange: onChange,
+    value: name
+  }), Object.keys(selectOptions).map(opt => {
+    const val = opt !== 'glasses' ? instructor[opt] : instructor[opt] ? 'yes' : 'no';
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      key: opt
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", {
+      htmlFor: opt
+    }, selectOptions[opt][1]), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+      name: opt,
+      onChange: onChange,
+      value: val
+    }, selectOptions[opt][0].map(_opt => {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+        key: _opt,
+        value: _opt
+      }, _opt);
+    })));
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+    disabled: instructor.name.length === 0
+  }, "Submit"));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (InstructorForm);
+
+/***/ }),
+
 /***/ "./client/components/InstructorList.js":
 /*!*********************************************!*\
   !*** ./client/components/InstructorList.js ***!
@@ -162,32 +319,33 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _Instructor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Instructor */ "./client/components/Instructor.js");
+/* harmony import */ var _Instructor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Instructor */ "./client/components/Instructor.js");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
 
 
- //import any sub-components
+
 
 class InstructorList extends react__WEBPACK_IMPORTED_MODULE_0___default.a.Component {
-  //constructor to initialize state
   constructor() {
     super();
     this.state = {
       instructors: []
     };
-  } //any lifecycle methods
-
+  }
 
   async componentDidMount() {
     const resp = await axios__WEBPACK_IMPORTED_MODULE_1___default.a.get('/api/instructor');
     this.setState({
       instructors: resp.data
     });
-  } //any custom methods
-  //render
-
+  }
 
   render() {
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, this.state.instructors.map(instructor => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Instructor__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["Link"], {
+      to: "/create"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      type: "button"
+    }, "Create New Teacher")), this.state.instructors.map(instructor => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Instructor__WEBPACK_IMPORTED_MODULE_2__["default"], {
       instructor: instructor,
       key: instructor.id
     })));
@@ -212,6 +370,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _InstructorForm__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./InstructorForm */ "./client/components/InstructorForm.js");
+/* eslint-disable react/button-has-type */
+
 
 
 
@@ -219,25 +380,68 @@ class SingleInstructor extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
   constructor() {
     super();
     this.state = {
-      instructor: {}
+      instructor: {
+        hair: '',
+        facialHair: '',
+        glasses: false,
+        name: '',
+        shirt: ''
+      },
+      loading: true,
+      redirect: false
     };
+    this.onChange = this.onChange.bind(this);
+    this.submit = this.submit.bind(this);
+    this.delete = this.delete.bind(this);
   }
 
   async componentDidMount() {
     const id = this.props.match.params.id;
     const res = await axios__WEBPACK_IMPORTED_MODULE_1___default.a.get(`/api/instructor/${id}`);
-    this.setState({
-      instructor: res.data
+    this.setState({ ...this.state,
+      instructor: res.data,
+      loading: false
     });
+  }
+
+  onChange(ev) {
+    const val = ev.target.name !== 'glasses' ? ev.target.value : ev.target.value === 'yes';
+    const instr = { ...this.state.instructor,
+      [ev.target.name]: val
+    };
+    this.setState({ ...this.state,
+      instructor: instr
+    });
+  }
+
+  async delete() {
+    await axios__WEBPACK_IMPORTED_MODULE_1___default.a.delete(`/api/instructor/${this.state.instructor.id}`);
+    this.setState({ ...this.state,
+      redirect: true
+    });
+  }
+
+  async submit(ev) {
+    ev.preventDefault();
+    await axios__WEBPACK_IMPORTED_MODULE_1___default.a.put(`/api/instructor/${this.state.instructor.id}`, this.state.instructor);
   }
 
   render() {
     const {
       instructor
     } = this.state;
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Name: ", instructor.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Hair: ", instructor.hair), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Facial Hair: ", instructor.facialHair), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Shirt: ", instructor.shirt), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h3", null, "Glasses: ", instructor.glasses ? 'Yes' : 'No'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+    if (this.state.redirect) return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Redirect"], {
       to: "/"
-    }, "Back"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+    });
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_InstructorForm__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      instructor: instructor,
+      submit: this.submit,
+      onChange: this.onChange
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+      to: "/"
+    }, "Back"), this.state.loading ? 'Loading' : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      id: "pic"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
       src: "bg.png"
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
       src: "head.png"
@@ -249,7 +453,10 @@ class SingleInstructor extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
       src: instructor.shirt + '.png'
     }), instructor.glasses ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
       src: "glasses.png"
-    }) : ''));
+    }) : ''), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+      className: "del",
+      onClick: this.delete
+    }, "Delete"));
   }
 
 }

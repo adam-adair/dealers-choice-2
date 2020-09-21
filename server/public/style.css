@@ -1,3 +1,28 @@
-img {
+#pic > img {
   position: absolute;
 }
+
+form > * {
+  display:block
+}
+
+form > div > * {
+  display: block
+}
+
+a {
+  display: block
+}
+
+.del {
+  background-color: salmon;
+  color: white;
+}
+
+#pic {
+  width: 100px;
+  height: 100px;
+}
+ button {
+   margin: 5px;
+ }
